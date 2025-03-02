@@ -2,10 +2,17 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- Versioning
 -----------------------------------------------------------------------------------------------------------------------------------------
-version = ''
+-- Load version file in the dependent scripts
+version = LoadResourceFile("lc_fuel", "version")
+if version then
+	version = Utils.Math.trim(version)
+else
+	error("^1[lc_fuel] Warning: Could not load the version file.^7")
+end
+
 subversion = ''
 api_response = {}
-local utils_required_version = '1.1.10'
+local utils_required_version = '1.2.0'
 local utils_outdated = false
 
 function checkVersion()
@@ -21,7 +28,7 @@ function checkVersion()
 					local latest_version = Utils.Math.trim(resultData)
 
 					api_response.latest_version = latest_version
-					if latest_version ~= Utils.Version then
+					if latest_version ~= version then
 						api_response.has_update = true
 						print("^4["..GetCurrentResourceName().."] An update is available, download it in https://github.com/LeonardoSoares98/lc_fuel/releases/latest/download/lc_fuel.zip^7 ^3[v"..api_response.latest_version.."]^7")
 					else
