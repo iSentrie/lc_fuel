@@ -1,0 +1,239 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Lexend+Zetta:wght@100..900&family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend+Zetta:wght@100..900&family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+
+		<!-- jQuery -->
+		<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="css/style.css">
+
+		<!-- Utils JavaScript -->
+		<script src="https://cfx-nui-lc_utils/nui/index.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="https://cfx-nui-lc_utils/nui/css/tooltip.css">
+	</head>
+
+	<body>
+		<div id="gas-pump-container" class="gas-pump-container" style="display: none; zoom: 100%; overflow: hidden;">
+			<img id="gas-pump-container-image" src="images/gas_pump.png" alt="background" width="1920">
+			<div class="gas-pump-interactive-button" onclick="openBuyJerryCanModal()">
+				<div class="gas-pump-interactive-inner-button"></div>
+			</div>
+			<div class="gas-pump-elements-container">
+				<div class="gas-pump-values-container">
+					<div class="controls-container">
+						<div></div>
+						<button onclick="increaseZoom()">+</button>
+						<button onclick="decreaseZoom()">-</button>
+						<!-- <button>?</button> -->
+					</div>
+					<div></div>
+					<div class="amount-display-container">
+						<span class="digital-text dark price-per-liter"></span>
+						<div class="quantity-input-container">
+							<button class="refuel-sub">-</button>
+							<input id="input-fuel-amount" class="digital-text" type="text" value="1">
+							<button class="refuel-add">+</button>
+						</div>
+						<div class="stock-values-container">
+							<span class="digital-text station-stock"></span>
+							<span class="digital-text vehicle-fuel"></span>
+						</div>
+					</div>
+					<div class="money-display-container">
+						<span class="digital-text-2 bank-balance"></span>
+						<span class="digital-text-2 cash-balance"></span>
+						<button class="confirm-button" onclick="confirmRefuel()"></button>
+					</div>
+					<div></div>
+				</div>
+				<div class="gas-pump-fuel-list-container">
+					<button class="fuel-type-button regular" onclick="changeSelectedFuelType('regular')"></button>
+					<button class="fuel-type-button plus" onclick="changeSelectedFuelType('plus')"></button>
+					<button class="fuel-type-button premium" onclick="changeSelectedFuelType('premium')"></button>
+					<button class="fuel-type-button diesel" onclick="changeSelectedFuelType('diesel')"></button>
+				</div>
+			</div>
+		</div>
+		<div id="refuel-display" class="refuel-display-body" style="display: none;">
+			<div class="refuel-display-container">
+				<div class="refuel-display-info-container" style="margin-top: 12px; margin-right: 5px;">
+					<span class="refuel-display-label" id="refuel-display-car-label"></span>
+					<div>
+						<span class="refuel-display-value" id="refuel-display-car-value"></span>
+						<small class="refuel-display-liters"></small>
+					</div>
+				</div>
+				<div class="refuel-display-info-container" style="margin-top: 9px; margin-right: 5px;">
+					<span class="refuel-display-label" id="refuel-display-pump-label"></span>
+					<div>
+						<span class="refuel-display-value" id="refuel-display-pump-value"></span>
+						<small class="refuel-display-liters"></small>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="recharge-display" class="recharge-display-body" style="display: none;">
+			<div class="recharge-display-container">
+				<div class="recharge-display-title-container">
+					<h3 id="recharge-display-title"></h3>
+				</div>
+				<div class="recharge-display-battery-container">
+					<span id="recharge-display-battery-level-span" style="width: 35px;"></span>
+					<div class="recharge-display-battery-bar-container">
+						<div class="recharge-display-battery-level">
+							<div id="recharge-display-battery-liquid" class="recharge-display-battery-liquid" style="width: 100%;"></div>
+						</div>
+					</div>
+				</div>
+				<div class="recharge-display-remaining-time-container">
+					<span id="recharge-display-remaining-time-title" class="recharge-display-remaining-time-title"></span>
+					<span id="recharge-display-remaining-time-value" class="recharge-display-remaining-time-value"></span>
+				</div>
+			</div>
+		</div>
+		
+		<div id="electric-charger-container" class="electric-charger-container" style="display: none; zoom: 100%; overflow: hidden;">
+			<img src="images/electric_charger.png" alt="background" width="1920">
+			<div class="electric-charger-elements-container">
+				<div class="electric-charger-type-container" style="display: none;">
+					<h5 id="electric-charger-type-title" class="electric-charger-title"></h5>
+					<section class="electric-charger-buttons-container">
+						<div id="electric-charger-fast-label-wrapper">
+							<input class="electric-charger-type-input" type="radio" id="charger-type-fast" name="charger-type" value="fast" checked>
+							<label id="electric-charger-fast-label" class="electric-charger-type-label" for="charger-type-fast">
+								<svg xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 49 49" fill="#ffee00d8"><path d="M18.7644 47C18.5131 47.0002 18.2647 46.9454 18.0369 46.8394C17.809 46.7334 17.6071 46.5788 17.4454 46.3864C17.2837 46.194 17.166 45.9685 17.1007 45.7259C17.0355 45.4832 17.0241 45.2291 17.0675 44.9816V44.9712L19.7028 30.5H9.5C9.2168 30.5 8.9394 30.4198 8.69987 30.2687C8.46034 30.1176 8.26849 29.9018 8.14649 29.6462C8.02449 29.3906 7.97733 29.1057 8.01047 28.8245C8.04361 28.5432 8.15569 28.2771 8.33375 28.0569L28.8809 2.65625C29.1148 2.35936 29.4395 2.14725 29.8053 2.05235C30.1712 1.95745 30.558 1.98498 30.9067 2.13074C31.2554 2.27649 31.5468 2.53245 31.7363 2.85946C31.9257 3.18647 32.0029 3.56655 31.9559 3.94156C31.9559 3.96968 31.9484 3.99687 31.9437 4.025L29.2991 18.5H39.5C39.7832 18.5 40.0606 18.5802 40.3001 18.7313C40.5397 18.8824 40.7315 19.0982 40.8535 19.3538C40.9755 19.6094 41.0227 19.8943 40.9895 20.1755C40.9564 20.4568 40.8443 20.7229 40.6663 20.9431L20.1163 46.3438C19.9548 46.5478 19.7494 46.7127 19.5153 46.8264C19.2812 46.94 19.0246 46.9993 18.7644 47Z"/></svg>
+								<h2 id="electric-charger-type-fast"></h2>
+								<div style="display: flex;flex-direction: column;">
+									<div class="electric-charger-type-label-item-container">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M96 0C78.3 0 64 14.3 64 32l0 96 64 0 0-96c0-17.7-14.3-32-32-32zM288 0c-17.7 0-32 14.3-32 32l0 96 64 0 0-96c0-17.7-14.3-32-32-32zM32 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l0 32c0 77.4 55 142 128 156.8l0 67.2c0 17.7 14.3 32 32 32s32-14.3 32-32l0-67.2c12.3-2.5 24.1-6.4 35.1-11.5c-2.1-10.8-3.1-21.9-3.1-33.3c0-80.3 53.8-148 127.3-169.2c.5-2.2 .7-4.5 .7-6.8c0-17.7-14.3-32-32-32L32 160zM432 512a144 144 0 1 0 0-288 144 144 0 1 0 0 288zm47.9-225c4.3 3.7 5.4 9.9 2.6 14.9L452.4 356l35.6 0c5.2 0 9.8 3.3 11.4 8.2s-.1 10.3-4.2 13.4l-96 72c-4.5 3.4-10.8 3.2-15.1-.6s-5.4-9.9-2.6-14.9L411.6 380 376 380c-5.2 0-9.8-3.3-11.4-8.2s.1-10.3 4.2-13.4l96-72c4.5-3.4 10.8-3.2 15.1 .6z"/></svg>
+										<span id="electric-charger-type-label-item-fast-power"></span>
+									</div>
+									<div class="electric-charger-type-label-item-container">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M0 112.5L0 422.3c0 18 10.1 35 27 41.3c87 32.5 174 10.3 261-11.9c79.8-20.3 159.6-40.7 239.3-18.9c23 6.3 48.7-9.5 48.7-33.4l0-309.9c0-18-10.1-35-27-41.3C462 15.9 375 38.1 288 60.3C208.2 80.6 128.4 100.9 48.7 79.1C25.6 72.8 0 88.6 0 112.5zM288 352c-44.2 0-80-43-80-96s35.8-96 80-96s80 43 80 96s-35.8 96-80 96zM64 352c35.3 0 64 28.7 64 64l-64 0 0-64zm64-208c0 35.3-28.7 64-64 64l0-64 64 0zM512 304l0 64-64 0c0-35.3 28.7-64 64-64zM448 96l64 0 0 64c-35.3 0-64-28.7-64-64z"/></svg>
+										<span id="electric-charger-type-label-item-fast-price"></span>
+									</div>
+								</div>
+							</label>
+						</div>
+						<div id="electric-charger-normal-label-wrapper">
+							<input class="electric-charger-type-input" type="radio" id="charger-type-normal" name="charger-type" value="normal">
+							<label id="electric-charger-normal-label" class="electric-charger-type-label" for="charger-type-normal">
+								<svg xmlns="http://www.w3.org/2000/svg" width="43" height="43" viewBox="0 0 43 43" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M16.125 2.49554C16.125 1.22331 15.0936 0.191971 13.8214 0.191971C12.5492 0.191971 11.5179 1.22331 11.5179 2.49554V10.846H9.21429C7.518 10.846 6.14286 12.2211 6.14286 13.9174V23.1317C6.14286 28.2206 10.2682 32.3458 15.3571 32.3458H19.1964V40.6006C19.1964 41.8728 20.2278 42.9042 21.5 42.9042C22.7722 42.9042 23.8036 41.8728 23.8036 40.6006V32.3458H27.6429C32.7319 32.3458 36.8571 28.2206 36.8571 23.1317V13.9174C36.8571 12.2211 35.4821 10.846 33.7857 10.846H31.4821V2.49554C31.4821 1.22331 30.4508 0.191971 29.1786 0.191971C27.9064 0.191971 26.875 1.22331 26.875 2.49554V10.846H16.125V2.49554Z" fill="white"/></svg>
+								<h2 id="electric-charger-type-normal"></h2>
+								<div style="display: flex;flex-direction: column;">
+									<div class="electric-charger-type-label-item-container">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M96 0C78.3 0 64 14.3 64 32l0 96 64 0 0-96c0-17.7-14.3-32-32-32zM288 0c-17.7 0-32 14.3-32 32l0 96 64 0 0-96c0-17.7-14.3-32-32-32zM32 160c-17.7 0-32 14.3-32 32s14.3 32 32 32l0 32c0 77.4 55 142 128 156.8l0 67.2c0 17.7 14.3 32 32 32s32-14.3 32-32l0-67.2c12.3-2.5 24.1-6.4 35.1-11.5c-2.1-10.8-3.1-21.9-3.1-33.3c0-80.3 53.8-148 127.3-169.2c.5-2.2 .7-4.5 .7-6.8c0-17.7-14.3-32-32-32L32 160zM432 512a144 144 0 1 0 0-288 144 144 0 1 0 0 288zm47.9-225c4.3 3.7 5.4 9.9 2.6 14.9L452.4 356l35.6 0c5.2 0 9.8 3.3 11.4 8.2s-.1 10.3-4.2 13.4l-96 72c-4.5 3.4-10.8 3.2-15.1-.6s-5.4-9.9-2.6-14.9L411.6 380 376 380c-5.2 0-9.8-3.3-11.4-8.2s.1-10.3 4.2-13.4l96-72c4.5-3.4 10.8-3.2 15.1 .6z"/></svg>
+										<span id="electric-charger-type-label-item-normal-power"></span>
+									</div>
+									<div class="electric-charger-type-label-item-container">
+										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M0 112.5L0 422.3c0 18 10.1 35 27 41.3c87 32.5 174 10.3 261-11.9c79.8-20.3 159.6-40.7 239.3-18.9c23 6.3 48.7-9.5 48.7-33.4l0-309.9c0-18-10.1-35-27-41.3C462 15.9 375 38.1 288 60.3C208.2 80.6 128.4 100.9 48.7 79.1C25.6 72.8 0 88.6 0 112.5zM288 352c-44.2 0-80-43-80-96s35.8-96 80-96s80 43 80 96s-35.8 96-80 96zM64 352c35.3 0 64 28.7 64 64l-64 0 0-64zm64-208c0 35.3-28.7 64-64 64l0-64 64 0zM512 304l0 64-64 0c0-35.3 28.7-64 64-64zM448 96l64 0 0 64c-35.3 0-64-28.7-64-64z"/></svg>
+										<span id="electric-charger-type-label-item-normal-price"></span>
+									</div>
+								</div>
+							</label>
+						</div>
+					</section>
+					<button id="electric-charger-continue-type-button" class="electric-charger-button" onclick="chargerTypeContinue()"></button>
+				</div>
+				
+				<div class="electric-charger-amount-container" style="display: none;">
+					<div onclick="chargerAmountReturn()" class="electric-charger-return-container">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+					</div>
+					<h5 id="electric-charger-amount-title" class="electric-charger-title" style="margin-bottom: 0;"></h5>
+					<h5 id="electric-charger-amount-type-selected" class="electric-charger-subtitle"></h5>
+					<div class="electric-charger-amount-input-container">
+						<button class="recharge-sub">-</button>
+						<input id="electric-charger-amount-input" class="electric-charger-amount-input" type="number" placeholder="" value="1">
+						<button class="recharge-add">+</button>
+					</div>
+					<div class="electric-amount-info-container">
+						<div class="electric-amount-progress-container">
+							<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="white" viewBox="0 0 512 512"><path d="M135.2 117.4L109.1 192l293.8 0-26.1-74.6C372.3 104.6 360.2 96 346.6 96L165.4 96c-13.6 0-25.7 8.6-30.2 21.4zM39.6 196.8L74.8 96.3C88.3 57.8 124.6 32 165.4 32l181.2 0c40.8 0 77.1 25.8 90.6 64.3l35.2 100.5c23.2 9.6 39.6 32.5 39.6 59.2l0 144 0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L96 400l0 48c0 17.7-14.3 32-32 32l-32 0c-17.7 0-32-14.3-32-32l0-48L0 256c0-26.7 16.4-49.6 39.6-59.2zM128 288a32 32 0 1 0 -64 0 32 32 0 1 0 64 0zm288 32a32 32 0 1 0 0-64 32 32 0 1 0 0 64z"/></svg>
+							<div class="recharge-display-battery-bar-container">
+								<div class="recharge-display-battery-level">
+									<div id="electric-amount-progress-bar" class="recharge-display-battery-liquid" style="width: 100%;"></div>
+								</div>
+							</div>
+						</div>
+						<span id="electric-time-to-recharge" class="electric-time-to-recharge"><span id="electric-time-to-recharge-value"></span></span>
+					</div>
+					<button id="electric-charger-continue-amount-button" class="electric-charger-button" onclick="chargerAmountContinue()"></button>
+				</div>
+
+				<div class="electric-charger-payment-container" style="display: none;">
+					<div onclick="chargerPaymentReturn()" class="electric-charger-return-container">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+					</div>
+					<h5 id="electric-charger-payment-title" class="electric-charger-title"></h5>
+					<section class="electric-charger-buttons-container">
+						<div>
+							<input class="electric-charger-type-input" type="radio" id="charger-payment-money" name="charger-payment" value="account1" checked>
+							<label class="electric-charger-type-label" for="charger-payment-money">
+								<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none"><path d="M19.0313 23.6982H16.2897C14.3501 23.6982 12.7605 22.0649 12.7605 20.0524C12.7605 19.4545 13.2563 18.9586 13.8542 18.9586C14.4522 18.9586 14.948 19.4545 14.948 20.0524C14.948 20.8545 15.5459 21.5107 16.2897 21.5107H19.0313C19.6001 21.5107 20.0522 21.0003 20.0522 20.3732C20.0522 19.5857 19.8334 19.469 19.3376 19.294L14.948 17.7628C14.0147 17.4274 12.7605 16.7565 12.7605 14.6128C12.7605 12.7899 14.2043 11.2878 15.9688 11.2878H18.7105C20.6501 11.2878 22.2397 12.9212 22.2397 14.9336C22.2397 15.5315 21.7438 16.0274 21.1459 16.0274C20.548 16.0274 20.0522 15.5315 20.0522 14.9336C20.0522 14.1316 19.4542 13.4753 18.7105 13.4753H15.9688C15.4001 13.4753 14.948 13.9858 14.948 14.6128C14.948 15.4003 15.1667 15.517 15.6626 15.692L20.0522 17.2232C20.9855 17.5586 22.2397 18.2295 22.2397 20.3732C22.2397 22.2107 20.7959 23.6982 19.0313 23.6982Z" fill="white"/><path d="M17.5 25.1562C16.9021 25.1562 16.4062 24.6604 16.4062 24.0625V10.9375C16.4062 10.3396 16.9021 9.84375 17.5 9.84375C18.0979 9.84375 18.5938 10.3396 18.5938 10.9375V24.0625C18.5938 24.6604 18.0979 25.1562 17.5 25.1562Z" fill="white"/><path d="M17.5001 33.1771C8.85216 33.1771 1.823 26.1479 1.823 17.5C1.823 8.85209 8.85216 1.82292 17.5001 1.82292C18.098 1.82292 18.5938 2.31876 18.5938 2.91667C18.5938 3.51459 18.098 4.01042 17.5001 4.01042C10.0626 4.01042 4.0105 10.0625 4.0105 17.5C4.0105 24.9375 10.0626 30.9896 17.5001 30.9896C24.9376 30.9896 30.9897 24.9375 30.9897 17.5C30.9897 16.9021 31.4855 16.4063 32.0834 16.4063C32.6813 16.4063 33.1772 16.9021 33.1772 17.5C33.1772 26.1479 26.148 33.1771 17.5001 33.1771Z" fill="white"/><path d="M32.0833 9.84375C31.4854 9.84375 30.9896 9.34792 30.9896 8.75V4.01042H26.25C25.6521 4.01042 25.1562 3.51459 25.1562 2.91667C25.1562 2.31876 25.6521 1.82292 26.25 1.82292H32.0833C32.6812 1.82292 33.1771 2.31876 33.1771 2.91667V8.75C33.1771 9.34792 32.6812 9.84375 32.0833 9.84375Z" fill="white"/><path d="M24.791 11.302C24.5139 11.302 24.2369 11.1999 24.0181 10.9812C23.5952 10.5582 23.5952 9.85825 24.0181 9.43533L31.3098 2.14366C31.7327 1.72075 32.4327 1.72075 32.8556 2.14366C33.2785 2.56658 33.2785 3.26658 32.8556 3.6895L25.5639 10.9812C25.3452 11.1999 25.0681 11.302 24.791 11.302Z" fill="white"/></svg>
+								<h2 id="electric-charger-payment-money"></h2>
+							</label>
+						</div>
+						<div>
+							<input class="electric-charger-type-input" type="radio" id="charger-payment-bank" name="charger-payment" value="account2">
+							<label class="electric-charger-type-label" for="charger-payment-bank">
+								<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none"><path d="M2.91675 11.6667V17.5015H4.37508V26.25H2.91675V30.625H4.37508H8.75008H11.6667H16.0417H18.9584H23.3334H26.2501L30.6251 30.6265L32.0834 30.625V26.25H30.6251V17.5015H32.0834V11.6667L17.5001 2.91667L2.91675 11.6667ZM8.75008 26.25V17.5015H11.6667V26.25H8.75008ZM16.0417 26.25V17.5015H18.9584V26.25H16.0417ZM26.2501 26.25H23.3334V17.5015H26.2501V26.25ZM20.4167 11.6667C20.4167 13.2767 19.1101 14.5833 17.5001 14.5833C15.8901 14.5833 14.5834 13.2767 14.5834 11.6667C14.5834 10.0567 15.8901 8.75001 17.5001 8.75001C19.1101 8.75001 20.4167 10.0567 20.4167 11.6667Z" fill="white"/></svg>
+								<h2 id="electric-charger-payment-bank"></h2>
+							</label>
+						</div>
+					</section>
+					<button id="electric-charger-pay-button" class="electric-charger-button" onclick="confirmRecharge()"></button>
+				</div>
+			</div>
+		</div>
+
+		<div id="confirm-refuel-payment-modal" class="modal" style="display: none;">
+			<div class="modal-content">
+				<span class="close-button" onclick="closeModal()">&times;</span>
+				<h2 id="confirm-refuel-payment-modal-title"></h2>
+				<p id="confirm-refuel-payment-modal-desc"></p>
+				<div class="modal-buttons">
+					<button id="confirm-refuel-payment-modal-pay-bank" class="modal-button" onclick="confirmRefuelPayment('account2')"></button>
+					<button id="confirm-refuel-payment-modal-pay-cash" class="modal-button" onclick="confirmRefuelPayment('account1')"></button>
+				</div>
+			</div>
+		</div>
+
+		<div id="confirm-jerry-can-payment-modal" class="modal" style="display: none;">
+			<div class="modal-content">
+				<span class="close-button" onclick="closeModal()">&times;</span>
+				<h2 id="confirm-jerry-can-payment-modal-title"></h2>
+				<img src="images/jerry_can.png" style="width: 140px;">
+				<h3 id="confirm-jerry-can-payment-modal-desc"></h3>
+				<div class="modal-buttons">
+					<button id="confirm-jerry-can-payment-modal-pay-bank" class="modal-button" onclick="confirmJerryCanPayment('account2')"></button>
+					<button id="confirm-jerry-can-payment-modal-pay-cash" class="modal-button" onclick="confirmJerryCanPayment('account1')"></button>
+				</div>
+			</div>
+		</div>
+
+		<div id="confirm-fuel-type-modal" class="modal" style="display: none;">
+			<div class="modal-content">
+				<span class="close-button" onclick="closeModal()">&times;</span>
+				<h2 id="confirm-fuel-type-modal-title"></h2>
+				<p id="confirm-fuel-type-modal-desc"></p>
+				<div class="modal-buttons">
+					<button id="confirm-fuel-type-modal-confirm" class="modal-button" onclick="changeVehicleFuelType()"></button>
+					<button id="confirm-fuel-type-modal-cancel" class="modal-button cancel-button" onclick="closeModal()"></button>
+				</div>
+			</div>
+		</div>
+
+		<script src="panel.js" type="text/javascript"></script>
+	</body>
+</html>

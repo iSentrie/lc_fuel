@@ -1,0 +1,887 @@
+@font-face {
+	font-family: 'Technology';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/Technology.woff') format('woff');
+}
+
+body {
+	margin: 0;
+}
+
+/* PUMP structure */
+.gas-pump-container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	height: 100%;
+	width: 100%;
+	background: #00000070;
+}
+
+.gas-pump-elements-container {
+	position: absolute;
+	bottom: 69px;
+	width: 100%;
+	display: grid;
+	justify-items: center;
+}
+
+.gas-pump-values-container {
+	display: grid;
+	grid-template-columns: 110px 274px 224.18px 186.52px 110px;
+}
+
+.digital-text {
+	color: #EBFEFF;
+	font-family: Technology;
+	font-size: 17px;
+	letter-spacing: 1.7px;
+	display: inline-block;
+}
+
+.digital-text-2 {
+	color: #EBFEFF;
+	text-align: center;
+	font-family: Technology;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	letter-spacing: 1.5px;
+	display: inline-block;
+}
+
+.digital-text.dark {
+	color: #263D3D;
+}
+
+/* Side buttons */
+.controls-container {
+	display: grid;
+	justify-items: start;
+	align-items: center;
+	font-family: 'Lexend';
+}
+
+.controls-container > button {
+	width: 37px;
+	height: 37px;
+	border-radius: 100px;
+	border: 1px solid rgba(200, 200, 200, 0.15);
+	background: rgba(0, 0, 0, 0.4);
+	transition: all 0.2s ease, cursor 0.2s ease;
+
+	color: #FFF;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+
+	/* Align the text */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.controls-container > button:hover {
+	cursor: pointer;
+	background: rgba(50, 50, 50, 0.4);
+}
+
+/* Interactive buttons */
+.gas-pump-interactive-button {
+	position: absolute;
+	bottom: 520px;
+	left: 50%;
+	transform: translateX(140px);
+	border-radius: 100px;
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	background: rgb(255 255 255 / 9%);
+	display: inline-flex;
+	padding: 7px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.gas-pump-interactive-inner-button {
+	width: 38px;
+	height: 38px;
+	border-radius: 100px;
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	background: rgb(255 255 255 / 29%);
+	transition: all 0.2s ease, cursor 0.2s ease;
+}
+
+.gas-pump-interactive-button:hover {
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	background: rgb(255 255 255 / 6%);
+	cursor: pointer;
+}
+
+.gas-pump-interactive-button:hover .gas-pump-interactive-inner-button {
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	background: rgb(255 255 255 / 20%);
+}  
+
+/* Center side of the PUMP */
+.quantity-input-container {
+	display: flex;
+	justify-content: center;
+	margin: 0px 15px 38px;
+}
+
+.quantity-input-container > input {
+	width: 68%;
+	padding: 0px 5px;
+	text-align: center;
+	border:none;
+	background-image:none;
+	background-color:transparent;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	outline: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.quantity-input-container > input::-webkit-outer-spin-button,
+.quantity-input-container > input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+.quantity-input-container > input[type=number] {
+	-moz-appearance: textfield;
+}
+
+.quantity-input-container > button {
+	color: #EBFEFF;
+	font-family: Technology;
+	font-weight: 700;
+	width: 31px;
+	height: 31px;
+	padding: 1px;
+
+	border: 2px solid #72697E;
+	background: #251825;
+
+	transition: all 0.2s ease, cursor 0.2s ease;
+}
+.quantity-input-container > button:hover {
+	cursor: pointer;
+	background: rgba(99, 105, 105, 0.15);
+}
+.quantity-input-container > .sub {
+	font-size: 25px;
+}
+.quantity-input-container > .add {
+	font-size: 17px;
+}
+
+.price-per-liter {
+	margin: 10px 30px 26px 15px;
+}
+
+.stock-values-container {
+	display: grid;
+	grid-template-columns: 50% 50%;
+}
+
+.stock-values-container > span {
+	margin: 0px 14px 13px;
+}
+
+/* Right side of the PUMP */
+.money-display-container {
+	padding: 22px 18px 0px 11px;
+	display: grid;
+	justify-items: start;
+}
+
+.bank-balance {
+	margin: 6px;
+}
+
+.cash-balance {
+	margin: 26px 6px 15px;
+}
+
+.confirm-button {
+	color: #263D3D;
+	font-family: "Lexend Zetta";
+	font-weight: 800;
+	letter-spacing: -2.2px;
+	width: 100%;
+	height: fit-content;
+	padding: 6px 6px;
+	font-size: 13px;
+	background: #909B9C;
+	border: solid 2px #697474;
+	transition: all 0.2s ease, cursor 0.2s ease;
+}
+
+.confirm-button:hover {
+	cursor: pointer;
+	background: #a3afb1;
+}
+
+/* Footer of the PUMP */
+.gas-pump-fuel-list-container {
+	display: grid;
+	grid-template-columns: 26% 26% 26% 22%;
+	margin-top: 22px;
+	height: 34px;
+	align-items: center;
+	width: 685px;
+}
+
+.fuel-type-button {
+	height: -webkit-fill-available;
+	background: #ffffff00;
+	border: none;
+	color: rgba(255, 255, 255, 0.45);
+	text-align: right;
+	font-family: Arial;
+	font-size: 15px;
+	font-weight: 700;
+	padding-right: 12px;
+	margin: 1px;
+	transition: all 0.1s ease, color 0.1s ease;
+}
+
+.fuel-type-button:hover {
+	cursor: pointer;
+}
+
+@keyframes pulseRegular {
+	0% {
+	background-color: rgba(255, 255, 255, 0.15);
+	box-shadow: rgb(255 255 255 / 30%) 0px 0px 8px 2px, rgb(255 255 255 / 10%) 0px 0px 4px 2px;
+	}
+	50% {
+	background-color: rgba(255, 255, 255, 0.35);
+	box-shadow: rgb(255 255 255 / 50%) 0px 0px 12px 4px, rgb(255 255 255 / 20%) 0px 0px 6px 3px;
+	}
+	100% {
+	background-color: rgba(255, 255, 255, 0.15);
+	box-shadow: rgb(255 255 255 / 30%) 0px 0px 8px 2px, rgb(255 255 255 / 10%) 0px 0px 4px 2px;
+	}
+}
+
+@keyframes pulsePlus {
+	0% {
+	background-color: rgba(0, 119, 255, 0.15);
+	box-shadow: rgba(0, 119, 255, 0.2) 0px 0px 8px 2px, rgba(0, 119, 255, 0.22) 0px 0px 4px 2px;
+	}
+	50% {
+	background-color: rgba(0, 119, 255, 0.35);
+	box-shadow: rgba(0, 119, 255, 0.5) 0px 0px 12px 4px, rgba(0, 119, 255, 0.35) 0px 0px 6px 3px;
+	}
+	100% {
+	background-color: rgba(0, 119, 255, 0.15);
+	box-shadow: rgba(0, 119, 255, 0.2) 0px 0px 8px 2px, rgba(0, 119, 255, 0.22) 0px 0px 4px 2px;
+	}
+}
+
+@keyframes pulsePremium {
+	0% {
+	background-color: rgba(255, 0, 0, 0.15);
+	box-shadow: rgba(255, 0, 0, 0.2) 0px 0px 8px 2px, rgba(255, 0, 0, 0.22) 0px 0px 4px 2px;
+	}
+	50% {
+	background-color: rgba(255, 0, 0, 0.35);
+	box-shadow: rgba(255, 0, 0, 0.5) 0px 0px 12px 4px, rgba(255, 0, 0, 0.35) 0px 0px 6px 3px;
+	}
+	100% {
+	background-color: rgba(255, 0, 0, 0.15);
+	box-shadow: rgba(255, 0, 0, 0.2) 0px 0px 8px 2px, rgba(255, 0, 0, 0.22) 0px 0px 4px 2px;
+	}
+}
+
+@keyframes pulseDiesel {
+	0% {
+	background-color: rgba(0, 165, 0, 0.15);
+	box-shadow: rgba(0, 165, 0, 0.2) 0px 0px 8px 2px, rgba(0, 165, 0, 0.20) 0px 0px 4px 2px;
+	}
+	50% {
+	background-color: rgba(0, 165, 0, 0.35);
+	box-shadow: rgba(0, 165, 0, 0.5) 0px 0px 12px 4px, rgba(0, 165, 0, 0.30) 0px 0px 6px 3px;
+	}
+	100% {
+	background-color: rgba(0, 165, 0, 0.15);
+	box-shadow: rgba(0, 165, 0, 0.2) 0px 0px 8px 2px, rgba(0, 165, 0, 0.20) 0px 0px 4px 2px;
+	}
+}
+
+.fuel-type-button.regular.selected,
+.fuel-type-button.regular:hover {
+	background: rgba(255, 255, 255, 0.15);
+	cursor: pointer;
+	animation: pulseRegular 3s infinite ease-in-out;
+}
+
+.fuel-type-button.plus.selected,
+.fuel-type-button.plus:hover {
+	background: rgba(0, 119, 255, 0.15);
+	cursor: pointer;
+	animation: pulsePlus 3s infinite ease-in-out;
+}
+
+.fuel-type-button.premium.selected,
+.fuel-type-button.premium:hover {
+	background: rgba(255, 0, 0, 0.15);
+	cursor: pointer;
+	animation: pulsePremium 3s infinite ease-in-out;
+}
+
+.fuel-type-button.diesel.selected,
+.fuel-type-button.diesel:hover {
+	background: rgba(0, 165, 0, 0.15);
+	cursor: pointer;
+	animation: pulseDiesel 3s infinite ease-in-out;
+}
+  
+
+.fuel-type-button.regular {
+	color: rgba(0, 0, 0, 0.75);
+}
+
+/* Refuel display */
+.refuel-display-body {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: end;
+	justify-content: center;
+	z-index: 1000;
+	font-family: Technology;
+}
+
+
+.refuel-display-container {
+	margin-bottom: 10vh;
+	padding: 30px;
+	background-image: url('../images/gas_refuel_display.png');
+	background-repeat: no-repeat;
+	background-position: center;
+    width: 193px;
+    height: 108px;
+	background-size: 100%;
+}
+
+.refuel-display-info-container {
+	display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.refuel-display-label {
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+    letter-spacing: 0.5;
+}
+
+.refuel-display-value {
+	color: #FFF;
+	font-size: 25px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+	letter-spacing: 1;
+}
+
+.refuel-display-liters {
+	color: #FFF;
+	font-size: 19px;
+}
+
+/* Recharge display */
+.recharge-display-body {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: end;
+	justify-content: center;
+	z-index: 1000;
+	font-family: Inter;
+	color: white;
+}
+
+.recharge-display-container {
+	margin-bottom: 10vh;
+	background-image: url('../images/electric_charger_display.png');
+	background-repeat: no-repeat;
+	background-position: center;
+    padding: 55px;
+    width: 210px;
+    height: 115px;
+	background-size: 100%;
+}
+
+.recharge-display-title-container {
+	display: flex;
+	justify-content: center;
+}
+
+.recharge-display-title-container h3 {
+    margin: 5px 0px 0px;
+}
+
+.recharge-display-battery-container {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+
+	border-top: 1px solid #ffffff27;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+:root {
+    /* color */
+    --gradient-color-red: linear-gradient(90deg,
+    hsl( 7, 89%, 46%) 15%,
+    hsl(11, 93%, 68%) 100%);
+    --gradient-color-orange: linear-gradient(90deg,
+    hsl( 22, 89%, 46%) 15%,
+    hsl(54, 93%, 68%) 100%);
+    --gradient-color-yellow: linear-gradient(90deg,
+    hsl( 54, 89%, 46%) 15%,
+    hsl(90, 93%, 68%) 100%);
+    --gradient-color-green: linear-gradient(90deg,
+    hsl( 92, 89%, 46%) 15%,
+    hsl(90, 93%, 68%) 100%);
+}
+
+.recharge-display-battery-bar-container {
+    position: relative;
+    width: 100%;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(247, 240, 240, 0.1);
+    border-radius: 3rem;
+    justify-self: flex-start;
+    
+}
+.recharge-display-battery-level {
+    position: absolute;
+    inset: 2px;
+    border-radius: 3rem;
+    overflow: hidden;
+}
+.recharge-display-battery-liquid {
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    width: 36px;
+    background: var(--gradient-color-yellow);
+    box-shadow: inset 12px 0 12px hsla(0, 0, 0, 0.15),
+        inset -12px 0 12px hsla(0, 0, 0, 0.1);
+    transition: 0.3s;    
+     
+}
+.recharge-display-battery-liquid::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    background: var(--gradient-color-yellow);
+    box-shadow: inset 0px -3px 6px hsla(0, 0, 0, 0.2);
+    top: 0;
+    left: 0;
+    margin: 0 auto;
+    right: -4px;
+    border-radius: 50%;
+}
+
+.recharge-display-remaining-time-container {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+
+	border-top: 1px solid #ffffff27;
+    padding-top: 5px;
+    margin-top: 10px;
+}
+
+.recharge-display-remaining-time-title {
+	color: #FFF;
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.recharge-display-remaining-time-value {
+    color: #FFF;
+    font-family: Inter;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+/* ELECTRIC CHARGER structure */
+.electric-charger-container {
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	height: 100%;
+	width: 100%;
+	background: #00000070;
+	font-family: Inter !important;
+}
+
+.electric-charger-elements-container {
+	position: absolute;
+	bottom: 440px;
+	width: 540px;
+	height: 535px;
+    margin-right: 65px;
+	display: grid;
+	justify-items: center;
+}
+
+.electric-charger-button {
+	padding: 10px;
+	width: 285px;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.15);
+	border: 0;
+	transition: all 0.2s ease, cursor 0.2s ease;
+
+	color: #FFF;
+	text-align: center;
+	font-family: Inter;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+}
+
+.electric-charger-button:hover {
+	cursor: pointer;
+	background: rgba(255, 255, 255, 0.24);
+}
+
+.electric-charger-title {
+	color: #FFF;
+	text-align: center;
+	font-size: 40px;
+	font-style: normal;
+	font-weight: 900;
+	line-height: normal;
+	margin: 50px 0px
+}
+
+.electric-charger-subtitle {
+	color: #FFF;
+	text-align: center;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+	margin: 5px 0px 40px 0px
+}
+
+.electric-charger-buttons-container {
+	display: flex;
+	gap: 15px;
+	margin-bottom: 16px;
+}
+
+.electric-charger-return-container {
+	position: absolute;
+	top: 20px;
+	left: 20px;
+}
+
+.electric-charger-return-container svg {
+	height: 25px;
+	fill: #ffffffa8;
+}
+
+.electric-charger-return-container svg:hover {
+	fill: #ffffffcc;
+	cursor: pointer;
+	transition: all 0.2s ease, cursor 0.2s ease;
+}
+
+/* RECHARGE TYPE */
+.electric-charger-type-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.electric-charger-type-input {
+	display: none;
+}
+
+.electric-charger-type-input:not(:disabled) ~ .electric-charger-type-label {
+	cursor: pointer;
+}
+
+.electric-charger-type-container .electric-charger-type-label {
+	height: 150px;
+	padding: 14px 13px 10px 13px;
+}
+
+.electric-charger-type-label {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	text-align: center;
+	height: 125px;
+	width: 115px;
+	padding: 9px;
+	border-radius: 10px;
+
+	color: #FFF;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+
+	background: rgba(255, 255, 255, 0.15);
+	border: 1px solid rgba(255, 255, 255, 0);
+}
+
+.electric-charger-type-label:hover {
+	cursor: pointer;
+	background: rgba(255, 255, 255, 0.24);
+	transition: all 0.2s ease, cursor 0.2s ease;
+}
+
+/* Disable hover when input is disabled */
+input.electric-charger-type-input:disabled + .electric-charger-type-label {
+	pointer-events: none; /* Disable hover and interaction */
+	cursor: not-allowed;  /* Optional: show not-allowed cursor */
+	opacity: 0.5;         /* Indicate visually that it's disabled */
+}
+
+.electric-charger-type-label h2 {
+	margin: 15 0 5 0;
+}
+
+.electric-charger-type-input:checked + .electric-charger-type-label {
+	border: 1px solid rgba(255, 255, 255, 0.35);
+	background: rgba(255, 255, 255, 0.35);
+}
+
+.electric-charger-type-label-item-container {
+	display: flex;
+	gap: 5px;
+
+	border-top: 1px solid #ffffff15;
+    padding-top: 3px;
+    margin-top: 3px;
+}
+
+.electric-charger-type-label-item-container svg {
+	height: 15px;
+	fill: #FFF;
+}
+
+.electric-charger-type-label-item-container span {
+	font-size: 13px;
+}
+
+/* SELECT AMOUNT */
+.electric-charger-amount-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* PAYMENT METHOD */
+.electric-charger-payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.electric-charger-amount-input-container {
+	display: flex;
+	gap: 10px;
+}
+
+.electric-charger-amount-input {
+	display: flex;
+	width: 125px;
+	padding: 10px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 7px;
+	flex-shrink: 0;
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+	background: rgba(255, 255, 255, 0.15);
+
+	color: rgba(255, 255, 255, 0.6);
+	text-align: center;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+}
+
+.electric-charger-amount-input::-webkit-outer-spin-button,
+.electric-charger-amount-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.recharge-sub, .recharge-add {
+	display: flex;
+	width: 44px;
+	height: 44px;
+	padding: 10px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 7px;
+	flex-shrink: 0;
+	border-radius: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.35);
+	background: rgba(255, 255, 255, 0.35);
+	
+	color: #FFF;
+	text-align: center;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+
+.recharge-sub {
+	font-size: 30px;
+	padding-bottom: 15px;
+}
+
+.recharge-add {
+	font-size: 25px;
+}
+
+.electric-amount-info-container {
+	margin: 20px 0px 15px 0px;
+}
+
+.electric-amount-progress-container {
+	display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 300px;
+	margin-bottom: 5px;
+}
+
+.electric-time-to-recharge {
+	margin-left: 10px;
+	color: #FFF;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+}
+
+.electric-time-to-recharge > span {
+	font-weight: 800;
+}
+
+/* Makes the texts not selectable */
+body {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	background: transparent !important;
+	user-select: none;
+}
+
+/* Modal */
+.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+
+.modal-content {
+	padding: 20px;
+	border-radius: 8px;
+	text-align: center;
+	width: 300px;
+	box-shadow: 0 4px 8px 2px rgba(0, 0, 0, 0.2);
+	position: relative;
+
+	border-radius: 5px;
+	border: 2px solid rgba(75, 75, 75, 0.50);
+	background: rgba(0, 0, 0, 0.5);
+	color: white;
+	font-family: "Lexend";
+	margin-bottom: 100px;
+}
+
+.close-button {
+	position: absolute;
+	top: 2px;
+	right: 13px;
+	font-size: 24px;
+	font-weight: bold;
+	color: #6a6a6a;
+	cursor: pointer;
+}
+
+.modal-buttons {
+	display: flex;
+	justify-content: space-around;
+	margin-top: 20px;
+	gap: 15px;
+}
+
+.modal-button {
+	color: white;
+	padding: 10px 20px;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+
+	border-radius: 5px;
+	background: rgba(255, 255, 255, 0.12);
+	font-family: "Lexend";
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	transition: all 0.2s ease, cursor 0.2s ease;
+}
+
+.modal-button:hover {
+	background-color: #135015;
+}
+
+.modal-button.cancel-button:hover {
+	background-color: #501313;
+}
