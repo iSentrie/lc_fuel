@@ -4,6 +4,7 @@ Lang['de'] = {
 	['open_refuel_target'] = "Öfne Tank Menü",
 	['open_recharge'] = "Drücke ~INPUT_CONTEXT~ zum Laden",
 	['open_recharge_target'] = "Öfne Lade Menü",
+	['blip_text'] = "Tankstelle",
 	['interact_with_vehicle'] = "drücke ~y~E~w~ zum Interagieren",
 	['return_nozzle'] = "drücke ~INPUT_CONTEXT~ um den Zapfhahn zurückzugeben",
 	['not_enough_refuel'] = "Sie haben den gesamten bezahlten Kraftstoff bereits verbraucht. Bitte kaufen Sie bei Bedarf zusätzlichen Treibstoff",

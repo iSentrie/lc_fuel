@@ -211,6 +211,7 @@ AddEventHandler('lc_fuel:getPumpNozzle', function(fuelAmountPurchased, fuelTypeP
 end)
 
 function refuelLoop(isFromJerryCan, fuelAmountPurchased, fuelTypePurchased, fuelNozzle)
+	loadNuiVariables()
 	local ped = PlayerPedId()
 	local inCooldown = false
 	local closestCapPos

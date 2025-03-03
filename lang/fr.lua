@@ -4,6 +4,7 @@ Lang['fr'] = {
 	['open_refuel_target'] = "Ouvrir le menu de ravitaillement",
 	['open_recharge'] = "Appuyez sur ~INPUT_CONTEXT~ pour recharger",
 	['open_recharge_target'] = "Ouvrir le menu de recharge",
+	['blip_text'] = "Station-service",
 	['interact_with_vehicle'] = "Appuyez sur ~y~E~w~ pour interagir",
 	['return_nozzle'] = "Appuyez sur ~INPUT_CONTEXT~ pour remettre le pistolet",
 	['not_enough_refuel'] = "Vous avez déjà utilisé tout le carburant que vous avez payé. Veuillez acheter du carburant supplémentaire si nécessaire",

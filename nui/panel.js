@@ -7,13 +7,12 @@ window.addEventListener("message", async function(event) {
 	if (item.data) {
 		currentPumpData = item.data;
 	}
-	if (item.utils) {
-		if (typeof Lang === "undefined") {
-			await Utils.loadLanguageModules(item.utils);
-		}
-	}
 	if (item.resourceName) {
 		Utils.setResourceName(item.resourceName);
+	}
+	if (item.utils) {
+		await Utils.loadLanguageModules(item.utils);
+		Utils.post("setNuiVariablesLoaded", null, "setNuiVariablesLoaded");
 	}
 	if (item.openMainUI) {
 		if (currentPumpData.isElectric) {

@@ -12,6 +12,7 @@ local fuelDecor = "_FUEL_LEVEL"
 local currentConsumption = 0.0
 local fuelSynced = false
 local closestVehicleToPump = 0
+local isNuiVariablesLoaded = false
 
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- Threads
@@ -93,8 +94,35 @@ function clientOpenUI(pump, pumpModel, isElectric)
 	end
 end
 
+function loadNuiVariables()
+	if isNuiVariablesLoaded then
+		return
+	end
+
+	-- Load NUI variables
+	SendNUIMessage({
+		utils = { config = Utils.Config, lang = Utils.Lang },
+		resourceName = GetCurrentResourceName()
+	})
+
+	local maxIterations = 100 -- Maximum number of iterations (100 * 100ms = 10 seconds)
+	local iterations = 0
+
+	while not isNuiVariablesLoaded do
+		Wait(100)
+		iterations = iterations + 1
+
+		if iterations >= maxIterations then
+			print("Error: Timeout while loading NUI variables after " .. iterations .. " attempts.")
+			return
+		end
+	end
+end
+
+
 RegisterNetEvent('lc_fuel:clientOpenUI')
 AddEventHandler('lc_fuel:clientOpenUI', function(data)
+	loadNuiVariables()
 	data.currentFuelType = dealWithDefaultFuelType(closestVehicleToPump, data.currentFuelType)
 	SendNUIMessage({
 		openMainUI = true,
@@ -124,6 +152,11 @@ RegisterNUICallback('post', function(body, cb)
 			cooldown = nil
 		end)
 	end
+end)
+
+RegisterNUICallback('setNuiVariablesLoaded', function(body, cb)
+	isNuiVariablesLoaded = true
+	cb(200)
 end)
 
 function closeUI()
@@ -368,6 +401,13 @@ function GetClosestPump(coords, isElectric)
 	end
 end
 
+function createBlips()
+	local text = Utils.translate('blip_text')
+	for _, blipCoords in pairs(Config.Blips.locations) do
+		Utils.Blips.createBlipForCoords(blipCoords.x,blipCoords.y,blipCoords.z,Config.Blips.blipId,Config.Blips.color,text,Config.Blips.scale,false)
+	end
+end
+
 function convertConfigVehiclesDisplayNameToHash()
 	Config.BlacklistedVehiclesHash = {}
 	for _, value in pairs(Config.BlacklistedVehicles) do
@@ -417,11 +457,9 @@ Citizen.CreateThread(function()
 
 	convertConfigVehiclesDisplayNameToHash()
 
-	-- Load NUI variables
-	SendNUIMessage({
-		utils = { config = Utils.Config, lang = Utils.Lang },
-		resourceName = GetCurrentResourceName()
-	})
+	if Config.Blips and Config.Blips.enabled then
+		createBlips()
+	end
 
 	-- Gas
 	if Utils.Config.custom_scripts_compatibility.target == "disabled" then

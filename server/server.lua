@@ -2,14 +2,8 @@
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- Versioning
 -----------------------------------------------------------------------------------------------------------------------------------------
--- Load version file in the dependent scripts
-version = LoadResourceFile("lc_fuel", "version")
-if version then
-	version = Utils.Math.trim(version)
-else
-	error("^1[lc_fuel] Warning: Could not load the version file.^7")
-end
 
+version = ''
 subversion = ''
 api_response = {}
 local utils_required_version = '1.2.0'
@@ -388,7 +382,7 @@ Citizen.CreateThread(function()
 	local versionFile = LoadResourceFile("lc_fuel", "version")
 	if versionFile then
 		version = Utils.Math.trim(versionFile)
-		print("^2[lc_fuel] Loaded! Support discord: https://discord.gg/U5YDgbh ^3[v"..version.."]^7")
+		print("^2[lc_fuel] Loaded! Support discord: https://discord.gg/U5YDgbh ^3[v"..version..subversion.."]^7")
 	else
 		error("^1[lc_fuel] Warning: Could not load the version file.^7")
 	end

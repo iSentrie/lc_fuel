@@ -4,6 +4,7 @@ Lang['zh-cn'] = {
 	['open_refuel_target'] = "访问油站",
 	['open_recharge'] = "键下 ~INPUT_CONTEXT~ 进行充电",
 	['open_recharge_target'] = "访问电站",
+	['blip_text'] = "加油站",
 	['interact_with_vehicle'] = "键下 ~y~E~w~ 链接载具",
 	['return_nozzle'] = "键下 ~INPUT_CONTEXT~ 归还油枪",
 	['not_enough_refuel'] = "您已用完所支付的燃油。如需继续，请购买更多燃油",
