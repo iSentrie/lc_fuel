@@ -189,10 +189,13 @@ function SetFuel(vehicle, fuel)
 		return
 	end
 
-	if type(fuel) ~= "number" or fuel < 0 or fuel > 100 then
+	if type(fuel) ~= "number" then
 		warn(("[SetFuel] Invalid fuel value received: %s. Fuel must be a number between 0 and 100."):format(tostring(fuel)))
 		return
 	end
+
+	-- Normalize the fuel values if received negative values or higher than 100
+	fuel = math.max(0.0, math.min(fuel, 100.0))
 
 	SetVehicleFuelLevel(vehicle, fuel + 0.0)
 	DecorSetFloat(vehicle, fuelDecor, GetVehicleFuelLevel(vehicle))
