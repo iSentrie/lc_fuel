@@ -451,7 +451,7 @@ AddEventHandler('lc_fuel:Notify', function(type,message)
 	exports['lc_utils']:notify(type,message)
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	Wait(1000)
 	SetNuiFocus(false,false)
 	SetNuiFocusKeepInput(false)
@@ -526,7 +526,7 @@ if Config.EnableHUD then
 	local x = 0.01135
 	local y = 0.002
 
-	Citizen.CreateThread(function()
+	CreateThread(function()
 		while true do
 			local ped = PlayerPedId()
 
@@ -542,14 +542,14 @@ if Config.EnableHUD then
 			else
 				displayHud = false
 
-				Citizen.Wait(500)
+				Wait(500)
 			end
 
-			Citizen.Wait(50)
+			Wait(50)
 		end
 	end)
 
-	Citizen.CreateThread(function()
+	CreateThread(function()
 		while true do
 			if displayHud then
 				DrawAdvancedText(0.130 - x, 0.77 - y, 0.005, 0.0028, 0.6, mph, 255, 255, 255, 255, 6, 1)
@@ -558,10 +558,10 @@ if Config.EnableHUD then
 				DrawAdvancedText(0.2615 - x, 0.77 - y, 0.005, 0.0028, 0.6, tostring(currentConsumption), 255, 255, 255, 255, 6, 1)
 				DrawAdvancedText(0.145 - x, 0.7765 - y, 0.005, 0.0028, 0.4, "mp/h              km/h                  Fuel                Consumption", 255, 255, 255, 255, 6, 1)
 			else
-				Citizen.Wait(50)
+				Wait(50)
 			end
 
-			Citizen.Wait(0)
+			Wait(0)
 		end
 	end)
 end
