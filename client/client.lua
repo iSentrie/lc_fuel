@@ -52,12 +52,20 @@ function HandleFuelConsumption(vehicle, fuelType)
 		fuelSynced = true
 	end
 
-	if GetIsVehicleEngineRunning(vehicle) then
-		currentConsumption = Config.FuelUsage[Utils.Math.round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.FuelConsumptionPerClass[GetVehicleClass(vehicle)] or 1.0) * (Config.FuelConsumptionPerFuelType[fuelType] or 1.0) / 10
-		SetFuel(vehicle, GetVehicleFuelLevel(vehicle) - currentConsumption)
-
-		validateDieselFuelMismatch(vehicle, fuelType)
+	if not GetIsVehicleEngineRunning(vehicle) then
+		return
 	end
+
+	local currentFuelLevel = GetVehicleFuelLevel(vehicle)
+	if currentFuelLevel <= 0.0 then
+		SetVehicleEngineOn(vehicle, false, true, false)
+		return
+	end
+
+	currentConsumption = Config.FuelUsage[Utils.Math.round(GetVehicleCurrentRpm(vehicle), 1)] * (Config.FuelConsumptionPerClass[GetVehicleClass(vehicle)] or 1.0) * (Config.FuelConsumptionPerFuelType[fuelType] or 1.0) / 10
+	SetFuel(vehicle, currentFuelLevel - currentConsumption)
+
+	validateDieselFuelMismatch(vehicle, fuelType)
 end
 
 function validateDieselFuelMismatch(vehicle, fuelType)
@@ -129,6 +137,7 @@ AddEventHandler('lc_fuel:clientOpenUI', function(data)
 		data = data
 	})
 	mainUiOpen = true
+	TriggerScreenblurFadeIn(1000)
 	FreezeEntityPosition(PlayerPedId(), true)
 	SetNuiFocus(true,true)
 end)
@@ -162,6 +171,7 @@ end)
 function closeUI()
 	mainUiOpen = false
 	FreezeEntityPosition(PlayerPedId(), false)
+	TriggerScreenblurFadeOut(1000)
 	SetNuiFocus(false,false)
 	SendNUIMessage({ hideMainUI = true })
 end

@@ -1,7 +1,7 @@
 local JERRY_CAN_HASH = 883325847
 local customGasPumps = {}
 
-distanceToCap, distanceToPump = 0, 0
+distanceToCap, distanceToPump = math.maxinteger, math.maxinteger
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- Threads
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -181,7 +181,7 @@ AddEventHandler('lc_fuel:getPumpNozzle', function(fuelAmountPurchased, fuelTypeP
 			if IsPedSittingInAnyVehicle(ped) then
 				-- Gives him 2 seconds to leave before clearing the nozzle
 				SetTimeout(2000,function()
-					if IsPedSittingInAnyVehicle(ped) then
+					if IsPedSittingInAnyVehicle(ped) and DoesEntityExist(fuelNozzle) then
 						exports['lc_utils']:notify("error", Utils.translate("too_far_away"))
 						deleteRopeAndNozzleProp()
 					end
@@ -207,11 +207,15 @@ AddEventHandler('lc_fuel:getPumpNozzle', function(fuelAmountPurchased, fuelTypeP
 			end
 			Wait(waitTime)
 		end
+		-- Not near the pump anymore
+		distanceToPump = math.maxinteger
 	end)
 
 	-- Thread to refuel the vehicle
 	CreateThread(function()
 		refuelLoop(false, fuelAmountPurchased, fuelTypePurchased, fuelNozzle)
+		-- Not near the fuel cap anymore
+		distanceToCap = math.maxinteger
 	end)
 end)
 
