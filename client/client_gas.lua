@@ -1,5 +1,7 @@
 local JERRY_CAN_HASH = 883325847
 local customGasPumps = {}
+
+distanceToCap, distanceToPump = 0, 0
 -----------------------------------------------------------------------------------------------------------------------------------------
 -- Threads
 -----------------------------------------------------------------------------------------------------------------------------------------
@@ -167,7 +169,7 @@ AddEventHandler('lc_fuel:getPumpNozzle', function(fuelAmountPurchased, fuelTypeP
 		while DoesEntityExist(fuelNozzle) do
 			local waitTime = 500
 			local nozzleCoords = GetEntityCoords(fuelNozzle)
-			local distanceToPump = #(pumpCoords - nozzleCoords)
+			distanceToPump = #(pumpCoords - nozzleCoords)
 			if distanceToPump > ropeLength then
 				exports['lc_utils']:notify("error", Utils.translate("too_far_away"))
 				deleteRopeAndNozzleProp()
@@ -189,14 +191,17 @@ AddEventHandler('lc_fuel:getPumpNozzle', function(fuelAmountPurchased, fuelTypeP
 				waitTime = 2
 				Utils.Markers.showHelpNotification(cachedTranslations.return_nozzle, true)
 				if IsControlJustPressed(0,38) then
-					Wait(100)
-					-- Avoid player press E to return nozzle and press E to refuel in same tick, so it gives preference to refuel
-					if not isRefuelling then
-						Utils.Animations.loadAnimDict("anim@am_hold_up@male")
-						TaskPlayAnim(ped, "anim@am_hold_up@male", "shoplift_high", 2.0, 8.0, -1, 50, 0, false, false, false)
-						Wait(300)
-						StopAnimTask(ped, "anim@am_hold_up@male", "shoplift_high", 1.0)
-						deleteRopeAndNozzleProp()
+					-- See which one the player is nearer. The fuel cap or fuel pump
+					if distanceToPump < distanceToCap then
+						Wait(100)
+						-- Avoid player press E to return nozzle and press E to refuel in same tick, so it gives preference to refuel
+						if not isRefuelling then
+							Utils.Animations.loadAnimDict("anim@am_hold_up@male")
+							TaskPlayAnim(ped, "anim@am_hold_up@male", "shoplift_high", 2.0, 8.0, -1, 50, 0, false, false, false)
+							Wait(300)
+							StopAnimTask(ped, "anim@am_hold_up@male", "shoplift_high", 1.0)
+							deleteRopeAndNozzleProp()
+						end
 					end
 				end
 			end
@@ -236,109 +241,115 @@ function refuelLoop(isFromJerryCan, fuelAmountPurchased, fuelTypePurchased, fuel
 
 	local animationDuration = 1000
 	if isFromJerryCan then
-		animationDuration = -1 -- Do not allow the player walk dureing refuel
+		animationDuration = -1 -- Do not allow the player walk during refuel from jerry can
 	end
 
 	isRefuelling = false
 	while DoesEntityExist(fuelNozzle) or (isFromJerryCan and GetSelectedPedWeapon(ped) == JERRY_CAN_HASH) do
 		local waitTime = 200
-		if closestCapPos and #(GetEntityCoords(ped) - vector3(closestCapPos.x,closestCapPos.y,closestCapPos.z + customVehicleParameters.nozzleOffset.up + 0.0)) < customVehicleParameters.distance + 0.0 and (not vehicleAttachedToNozzle or (vehicleAttachedToNozzle and DoesEntityExist(vehicleAttachedToNozzle) and vehicleAttachedToNozzle == closestVehicle)) then
-			waitTime = 1
-			Utils.Markers.drawText3D(closestCapPos.x,closestCapPos.y,closestCapPos.z + customVehicleParameters.nozzleOffset.up + 0.0, cachedTranslations.interact_with_vehicle)
-			if IsControlJustPressed(0, 38) and not inCooldown then
-				-- Do not allow user mix electric and petrol fuel/vehicles
-				if (isElectric and Config.Electric.vehiclesListHash[closestVehicleHash]) or (not isElectric and not Config.Electric.vehiclesListHash[closestVehicleHash]) then
-					if not isRefuelling and not vehicleAttachedToNozzle then
-						if remainingFuelToRefuel > 0 then
-							-- Reset the vehicle fuel to 0 when refueling with a different fuel type
-							if not isFromJerryCan and not isElectric then
-								local fuelType = getVehicleFuelTypeFromServer(closestVehicle)
-								if fuelTypePurchased ~= fuelType then
-									changeVehicleFuelType(closestVehicle, fuelTypePurchased)
-								end
-							end
-							isRefuelling = true
-
-							-- Animate the ped for 1 sec
-							TaskTurnPedToFaceCoord(ped, closestCapPos.x, closestCapPos.y, closestCapPos.z, animationDuration)
-							Utils.Animations.loadAnimDict("weapons@misc@jerrycan@")
-							TaskPlayAnim(ped, "weapons@misc@jerrycan@", "fire", 2.0, 8.0, animationDuration, 50, 0, false, false, false)
-
-							-- Plug the nozzle in the car
-							attachNozzleToVehicle(closestVehicle, customVehicleParameters)
-							vehicleAttachedToNozzle = closestVehicle
-
-							-- Refuel the vehicle
-							refuelingThread = CreateThread(function()
-								local vehicleToRefuel = closestVehicle
-								local startingFuel = GetFuel(vehicleToRefuel) -- Get vehicle fuel level
-
-								-- WIP
-								-- local vehicleHash = GetEntityModel(vehicleToRefuel)
-								local vehicleTankSize = 100 -- Config.TankSizesHash[vehicleHash] or Config.DefaultTankSize
-								-- end WIP
-
-								local currentFuel = startingFuel
-								-- Loop keep happening while the player has not canceled, while the fuelNozzle exists and while the ped still has jerry can in hands
-								while isRefuelling and (DoesEntityExist(fuelNozzle) or (isFromJerryCan and GetSelectedPedWeapon(ped) == JERRY_CAN_HASH)) do
-									currentFuel = GetFuel(vehicleToRefuel)
-									local fuelToAdd = 0.5 -- Add 0.5% each tick
-									if currentFuel + fuelToAdd > vehicleTankSize then
-										-- Increase the vehicle fuel level
-										fuelToAdd = vehicleTankSize - currentFuel
+		if closestCapPos then
+			distanceToCap = #(GetEntityCoords(ped) - vector3(closestCapPos.x,closestCapPos.y,closestCapPos.z + customVehicleParameters.nozzleOffset.up + 0.0))
+			if distanceToCap < customVehicleParameters.distance + 0.0 and (not vehicleAttachedToNozzle or (vehicleAttachedToNozzle and DoesEntityExist(vehicleAttachedToNozzle) and vehicleAttachedToNozzle == closestVehicle)) then
+				waitTime = 1
+				Utils.Markers.drawText3D(closestCapPos.x,closestCapPos.y,closestCapPos.z + customVehicleParameters.nozzleOffset.up + 0.0, cachedTranslations.interact_with_vehicle)
+				if IsControlJustPressed(0, 38) and not inCooldown then
+					-- See which one the player is nearer. The fuel cap or fuel pump
+					if distanceToPump >= distanceToCap then
+						-- Do not allow user mix electric and petrol fuel/vehicles
+						if (isElectric and Config.Electric.vehiclesListHash[closestVehicleHash]) or (not isElectric and not Config.Electric.vehiclesListHash[closestVehicleHash]) then
+							if not isRefuelling and not vehicleAttachedToNozzle then
+								if remainingFuelToRefuel > 0 then
+									-- Reset the vehicle fuel to 0 when refueling with a different fuel type
+									if not isFromJerryCan and not isElectric then
+										local fuelType = getVehicleFuelTypeFromServer(closestVehicle)
+										if fuelTypePurchased ~= fuelType then
+											changeVehicleFuelType(closestVehicle, fuelTypePurchased)
+										end
 									end
-									if remainingFuelToRefuel < fuelToAdd then
-										-- Break when the user has used all the fuel he paid for
-										break
-									end
-									if fuelToAdd <= 0.1 then
-										-- Break when the vehicle tank is full
-										exports['lc_utils']:notify("info", Utils.translate("vehicle_tank_full"))
-										break
-									end
-									-- Decrease the purchased fuel amount and increase the vehicle fuel level
-									remainingFuelToRefuel = remainingFuelToRefuel - fuelToAdd
-									currentFuel = currentFuel + fuelToAdd
-									SetFuel(vehicleToRefuel, currentFuel)
-									SendNUIMessage({
-										showRefuelDisplay = true,
-										remainingFuelAmount = remainingFuelToRefuel,
-										currentVehicleTank = currentFuel,
-										isElectric = isElectric,
-										fuelTypePurchased = fuelTypePurchased
-									})
-									Wait(refuelTick)
-								end
-								if isFromJerryCan then
-									-- Update the jerry can ammo
-									SetPedAmmo(ped, JERRY_CAN_HASH, remainingFuelToRefuel)
-									UpdateWeaponAmmo(remainingFuelToRefuel)
-								end
-								if isElectric then
-									exports['lc_utils']:notify("success", Utils.translate("vehicle_recharged"):format(Utils.Math.round(currentFuel - startingFuel, 1)))
+									isRefuelling = true
+
+									-- Animate the ped for 1 sec
+									TaskTurnPedToFaceCoord(ped, closestCapPos.x, closestCapPos.y, closestCapPos.z, animationDuration)
+									Utils.Animations.loadAnimDict("weapons@misc@jerrycan@")
+									TaskPlayAnim(ped, "weapons@misc@jerrycan@", "fire", 2.0, 8.0, animationDuration, 50, 0, false, false, false)
+
+									-- Plug the nozzle in the car
+									attachNozzleToVehicle(closestVehicle, customVehicleParameters)
+									vehicleAttachedToNozzle = closestVehicle
+
+									-- Refuel the vehicle
+									refuelingThread = CreateThread(function()
+										local vehicleToRefuel = closestVehicle
+										local startingFuel = GetFuel(vehicleToRefuel) -- Get vehicle fuel level
+
+										-- WIP
+										-- local vehicleHash = GetEntityModel(vehicleToRefuel)
+										local vehicleTankSize = 100 -- Config.TankSizesHash[vehicleHash] or Config.DefaultTankSize
+										-- end WIP
+
+										local currentFuel = startingFuel
+										-- Loop keep happening while the player has not canceled, while the fuelNozzle exists and while the ped still has jerry can in hands
+										while isRefuelling and (DoesEntityExist(fuelNozzle) or (isFromJerryCan and GetSelectedPedWeapon(ped) == JERRY_CAN_HASH)) do
+											currentFuel = GetFuel(vehicleToRefuel)
+											local fuelToAdd = 0.5 -- Add 0.5% each tick
+											if currentFuel + fuelToAdd > vehicleTankSize then
+												-- Increase the vehicle fuel level
+												fuelToAdd = vehicleTankSize - currentFuel
+											end
+											if remainingFuelToRefuel < fuelToAdd then
+												-- Break when the user has used all the fuel he paid for
+												break
+											end
+											if fuelToAdd <= 0.1 then
+												-- Break when the vehicle tank is full
+												exports['lc_utils']:notify("info", Utils.translate("vehicle_tank_full"))
+												break
+											end
+											-- Decrease the purchased fuel amount and increase the vehicle fuel level
+											remainingFuelToRefuel = remainingFuelToRefuel - fuelToAdd
+											currentFuel = currentFuel + fuelToAdd
+											SetFuel(vehicleToRefuel, currentFuel)
+											SendNUIMessage({
+												showRefuelDisplay = true,
+												remainingFuelAmount = remainingFuelToRefuel,
+												currentVehicleTank = currentFuel,
+												isElectric = isElectric,
+												fuelTypePurchased = fuelTypePurchased
+											})
+											Wait(refuelTick)
+										end
+										if isFromJerryCan then
+											-- Update the jerry can ammo
+											SetPedAmmo(ped, JERRY_CAN_HASH, remainingFuelToRefuel)
+											UpdateWeaponAmmo(remainingFuelToRefuel)
+										end
+										if isElectric then
+											exports['lc_utils']:notify("success", Utils.translate("vehicle_recharged"):format(Utils.Math.round(currentFuel - startingFuel, 1)))
+										else
+											exports['lc_utils']:notify("success", Utils.translate("vehicle_refueled"):format(Utils.Math.round(currentFuel - startingFuel, 1)))
+										end
+										stopRefuelAction()
+										isRefuelling = false
+									end)
 								else
-									exports['lc_utils']:notify("success", Utils.translate("vehicle_refueled"):format(Utils.Math.round(currentFuel - startingFuel, 1)))
+									exports['lc_utils']:notify("error", Utils.translate("not_enough_refuel"))
 								end
+							else
+								-- Stop refuelling
 								stopRefuelAction()
+								attachNozzleToPed()
+								vehicleAttachedToNozzle = nil
 								isRefuelling = false
-							end)
+								-- Cooldown to prevent the user to spam E and glitch things
+								inCooldown = true
+								SetTimeout(refuelTick + 1,function()
+									inCooldown = false
+								end)
+							end
 						else
-							exports['lc_utils']:notify("error", Utils.translate("not_enough_refuel"))
+							exports['lc_utils']:notify("error", Utils.translate("incompatible_fuel"))
 						end
-					else
-						-- Stop refuelling
-						stopRefuelAction()
-						attachNozzleToPed()
-						vehicleAttachedToNozzle = nil
-						isRefuelling = false
-						-- Cooldown to prevent the user to spam E and glitch things
-						inCooldown = true
-						SetTimeout(refuelTick + 1,function()
-							inCooldown = false
-						end)
 					end
-				else
-					exports['lc_utils']:notify("error", Utils.translate("incompatible_fuel"))
 				end
 			end
 		else
