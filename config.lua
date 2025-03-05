@@ -343,7 +343,7 @@ Config.CustomVehicleParameters = {
 	-- Cars
 	["asbo"] = { distance = 1.2, nozzleOffset = { forward = 0.0, right = -0.21, up = 0.50} },
 	-- Trucks
-	["benson"] = { distance = 1.2, nozzleOffset = { forward = 0.3, right = 0.32, up = 0.19 }, nozzleRotation = { x = 0, y = 0, z = 180} },
+	["benson"] = { distance = 1.3, nozzleOffset = { forward = 0.32, right = 0.40, up = 0.21} , nozzleRotation = { x = 0, y = 0, z = 180} },
 }
 
 -- Settings for the map blips
